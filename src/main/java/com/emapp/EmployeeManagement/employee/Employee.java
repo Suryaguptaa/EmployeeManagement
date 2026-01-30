@@ -2,6 +2,8 @@ package com.emapp.EmployeeManagement.employee;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 
 @Entity
 @Table(name = "employees")
@@ -20,6 +22,13 @@ public class Employee {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private EmployeeRole role;
+
+    @ManyToOne
+    @JoinColumn(name = "manager_id")
+    private Employee manager;
+
+    @OneToMany(mappedBy = "manager")
+    private List<Employee> subordinates;
 
     protected Employee(){
     }
@@ -44,5 +53,13 @@ public class Employee {
 
     public EmployeeRole getRole(){
         return role;
+    }
+
+    public Employee getManager(){
+        return manager;
+    }
+
+    public List<Employee> getSubordinates(){
+        return subordinates;
     }
 }
