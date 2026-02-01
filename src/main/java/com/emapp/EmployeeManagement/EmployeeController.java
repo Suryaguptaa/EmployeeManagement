@@ -7,6 +7,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
@@ -28,5 +30,10 @@ public class EmployeeController {
             ){
         employeeApplicationService.assignManager(request);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{managerId}/subordinates")
+    public List<EmployeeResponse> getSubordinates(@PathVariable Long managerId){
+        return employeeApplicationService.getSubordinates(managerId);
     }
 }

@@ -9,6 +9,8 @@ import com.emapp.EmployeeManagement.common.exception.ResourceNotFoundException;
 import com.emapp.EmployeeManagement.common.exception.InvalidOperationException;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class EmployeeApplicationService {
 
@@ -65,5 +67,20 @@ public class EmployeeApplicationService {
         }
 
         employee.setManager(manager);
+    }
+
+    public List<EmployeeResponse> getSubordinates(Long managerId){
+        Employee manager = employeeRepository.findById(managerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Manager not found"));
+
+        return manager.getSubordinates()
+                .stream()
+                .map(emp -> new EmployeeResponse(
+                        emp.getId().toString(),
+                        emp.getFullname(),
+                        emp.getEmail(),
+                        emp.getRole()
+                ))
+                .toList();
     }
 }
