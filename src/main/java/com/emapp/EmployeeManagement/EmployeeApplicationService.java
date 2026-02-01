@@ -3,10 +3,11 @@ package com.emapp.EmployeeManagement;
 
 import com.emapp.EmployeeManagement.common.exception.EmailAlreadyExistsException;
 import com.emapp.EmployeeManagement.employee.*;
+//import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.stereotype.Service;
+import com.emapp.EmployeeManagement.common.exception.ResourceNotFoundException;
+import com.emapp.EmployeeManagement.common.exception.InvalidOperationException;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.UUID;
 
 @Service
 public class EmployeeApplicationService {
@@ -42,5 +43,27 @@ public class EmployeeApplicationService {
                 savedEmployee.getRole()
         );
 
+    }
+
+    @Transactional
+    public void assignManager(AssignManagerRequest request){
+
+        Employee employee = employeeRepository.findById(request.getEmployeeId())
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
+
+        Employee manager = employeeRepository.findById(request.getManagerId())
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Manager not found"));
+
+
+        if (employee.getId().equals(manager.getId())) {
+            throw new InvalidOperationException("Employee can't be their own manager");
+        }
+
+        if (manager.getRole() == EmployeeRole.EMPLOYEE) {
+            throw new InvalidOperationException("Selected manager does not have manager privileges");
+        }
+
+        employee.setManager(manager);
     }
 }

@@ -62,4 +62,8 @@ public class Employee {
     public List<Employee> getSubordinates(){
         return subordinates;
     }
+
+    public void setManager(Employee manager) {
+        this.manager = manager;
+    }
 }
