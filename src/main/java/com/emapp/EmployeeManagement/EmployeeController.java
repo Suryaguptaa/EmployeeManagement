@@ -6,6 +6,7 @@ import com.emapp.EmployeeManagement.employee.EmployeeRequest;
 import com.emapp.EmployeeManagement.employee.EmployeeResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,6 +34,7 @@ public class EmployeeController {
         return ResponseEntity.ok().build();
     }
 
+    @Transactional
     @GetMapping("/{managerId}/subordinates")
     public List<EmployeeResponse> getSubordinates(@PathVariable Long managerId){
         return employeeApplicationService.getSubordinates(managerId);
@@ -44,5 +46,10 @@ public class EmployeeController {
             ){
         employeeApplicationService.assignTeam(request);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/team/{teamId}")
+    public List<EmployeeResponse> getTeamMembers(@PathVariable Long teamId){
+       return employeeApplicationService.getTeamMembers(teamId);
     }
 }

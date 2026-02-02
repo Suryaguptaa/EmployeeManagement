@@ -102,4 +102,17 @@ public class EmployeeApplicationService {
 
         employee.setTeam(team);
     }
+
+    public List<EmployeeResponse> getTeamMembers(Long teamId){
+
+        return employeeRepository.findByTeamId(teamId)
+                .stream()
+                .map(emp -> new EmployeeResponse(
+                        emp.getId().toString(),
+                        emp.getFullname(),
+                        emp.getEmail(),
+                        emp.getRole()
+                ))
+                .toList();
+    }
 }

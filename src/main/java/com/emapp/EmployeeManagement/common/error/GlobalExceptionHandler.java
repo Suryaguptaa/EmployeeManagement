@@ -1,6 +1,8 @@
 package com.emapp.EmployeeManagement.common.error;
 
 import com.emapp.EmployeeManagement.common.exception.EmailAlreadyExistsException;
+import com.emapp.EmployeeManagement.common.exception.InvalidOperationException;
+import com.emapp.EmployeeManagement.common.exception.ResourceNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -58,5 +60,30 @@ public class GlobalExceptionHandler {
         );
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleResourceNotFound(
+            ResourceNotFoundException ex
+    ){
+        ApiErrorResponse response = new ApiErrorResponse(
+                "Resource Not Found",
+                ex.getMessage(),
+                null
+        );
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    @ExceptionHandler(InvalidOperationException.class)
+    public ResponseEntity<ApiErrorResponse> handleInvalidOperation(
+            InvalidOperationException ex
+    ){
+        ApiErrorResponse response = new ApiErrorResponse(
+                "Invalid_Operation",
+                ex.getMessage(),
+                null
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 }
