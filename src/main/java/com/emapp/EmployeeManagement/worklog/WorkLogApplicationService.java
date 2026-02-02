@@ -92,4 +92,25 @@ public class WorkLogApplicationService {
                 .toList();
     }
 
+    public List<WorkLogResponse> getWeeklySummary(
+            Long employeeId,
+            LocalDate weekStartDate
+    ){
+        LocalDateTime start = weekStartDate.atStartOfDay();
+        LocalDateTime end = weekStartDate.plusDays(6).atTime(23,59,59);
+
+        return workLogRepository
+                .findByEmployeeIdAndStartTimeBetween(employeeId,start,end)
+                .stream()
+                .map(log -> new WorkLogResponse(
+                        log.getId(),
+                        log.getDescription(),
+                        log.getWorkType(),
+                        log.getStatus(),
+                        log.getStartTime(),
+                        log.getEndTime()
+                ))
+                .toList();
+    }
+
 }
