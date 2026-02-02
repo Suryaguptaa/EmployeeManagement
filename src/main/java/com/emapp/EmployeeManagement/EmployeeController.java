@@ -1,6 +1,7 @@
 package com.emapp.EmployeeManagement;
 
 import com.emapp.EmployeeManagement.employee.AssignManagerRequest;
+import com.emapp.EmployeeManagement.employee.AssignTeamRequest;
 import com.emapp.EmployeeManagement.employee.EmployeeRequest;
 import com.emapp.EmployeeManagement.employee.EmployeeResponse;
 import jakarta.validation.Valid;
@@ -35,5 +36,13 @@ public class EmployeeController {
     @GetMapping("/{managerId}/subordinates")
     public List<EmployeeResponse> getSubordinates(@PathVariable Long managerId){
         return employeeApplicationService.getSubordinates(managerId);
+    }
+
+    @PostMapping("/assing-team")
+    public ResponseEntity<Void> assignTeam(
+            @Valid @RequestBody AssignTeamRequest request
+            ){
+        employeeApplicationService.assignTeam(request);
+        return ResponseEntity.ok().build();
     }
 }

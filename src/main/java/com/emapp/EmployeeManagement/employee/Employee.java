@@ -3,6 +3,7 @@ package com.emapp.EmployeeManagement.employee;
 import jakarta.persistence.*;
 
 import java.util.List;
+import com.emapp.EmployeeManagement.team.Team;
 
 
 @Entity
@@ -29,6 +30,10 @@ public class Employee {
 
     @OneToMany(mappedBy = "manager")
     private List<Employee> subordinates;
+
+    @ManyToOne
+    private Team team;
+
 
     protected Employee(){
     }
@@ -65,5 +70,8 @@ public class Employee {
 
     public void setManager(Employee manager) {
         this.manager = manager;
+    }
+
+    public void setTeam(Team team) {
     }
 }

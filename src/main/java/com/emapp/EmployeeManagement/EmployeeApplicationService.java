@@ -4,6 +4,8 @@ package com.emapp.EmployeeManagement;
 import com.emapp.EmployeeManagement.common.exception.EmailAlreadyExistsException;
 import com.emapp.EmployeeManagement.employee.*;
 //import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
+import com.emapp.EmployeeManagement.team.Team;
+import com.emapp.EmployeeManagement.team.TeamRepository;
 import org.springframework.stereotype.Service;
 import com.emapp.EmployeeManagement.common.exception.ResourceNotFoundException;
 import com.emapp.EmployeeManagement.common.exception.InvalidOperationException;
@@ -15,10 +17,15 @@ import java.util.List;
 public class EmployeeApplicationService {
 
     private final EmployeeRepository employeeRepository;
+    private final TeamRepository teamRepository;
 
-    public EmployeeApplicationService(EmployeeRepository employeeRepository) {
+    public EmployeeApplicationService(EmployeeRepository employeeRepository, TeamRepository teamRepository) {
         this.employeeRepository = employeeRepository;
+        this.teamRepository = teamRepository;
     }
+
+
+
 
     @Transactional
     public EmployeeResponse createEmployee(EmployeeRequest request) {
@@ -82,5 +89,17 @@ public class EmployeeApplicationService {
                         emp.getRole()
                 ))
                 .toList();
+    }
+
+    @Transactional
+    public void assignTeam(AssignTeamRequest request){
+
+        Employee employee = employeeRepository.findById(request.getEmployeeId())
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
+
+        Team team = teamRepository.findById(request.getTeamId())
+                .orElseThrow(() -> new ResourceNotFoundException("Team not found"));
+
+        employee.setTeam(team);
     }
 }
