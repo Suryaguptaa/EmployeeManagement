@@ -1,7 +1,9 @@
 package com.emapp.EmployeeManagement.ai;
 
 import com.emapp.EmployeeManagement.worklog.ManagerWeeklySummaryResponse;
+import org.springframework.stereotype.Component;
 
+@Component
 public class WeeklySummaryPromptBuilder {
 
     public String buildPrompt(WeeklyTeamFacts facts)

@@ -11,11 +11,11 @@ public class WeeklyTeamFacts {
     private final LocalDate weekStart;
     private final List<ManagerWeeklySummaryResponse> teamSummaries;
 
-    private WeeklyTeamFacts(
-                    String managerName,
-                    LocalDate weekStart,
-                    List<ManagerWeeklySummaryResponse> teamSummaries
-            ) {
+    public WeeklyTeamFacts(
+            String managerName,
+            LocalDate weekStart,
+            List<ManagerWeeklySummaryResponse> teamSummaries
+    ) {
             this.managerName = managerName;
             this.weekStart = weekStart;
             this.teamSummaries = teamSummaries;
