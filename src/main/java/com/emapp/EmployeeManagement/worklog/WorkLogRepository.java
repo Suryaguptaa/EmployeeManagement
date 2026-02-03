@@ -15,7 +15,7 @@ public interface WorkLogRepository extends JpaRepository<WorkLog, Long> {
     );
 
     List<WorkLog> findByEmployeeIdInAndStartTimeBetween(
-            List<Long> employeeId,
+            List<Long> employeeIds,
             LocalDateTime start,
             LocalDateTime end
     );

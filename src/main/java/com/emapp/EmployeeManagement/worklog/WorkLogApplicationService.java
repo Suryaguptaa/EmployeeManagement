@@ -113,18 +113,21 @@ public class WorkLogApplicationService {
                 .toList();
     }
 
-    public List<ManagerWeeklySummuryResponse> getManagerWeeklyResponse(
+
+
+    @Transactional(readOnly = true)
+    public List<ManagerWeeklySummaryResponse> getManagerWeeklySummary(
             Long managerId,
             LocalDate weekStartDate
-    )
-    {
+    ) {
+
         Employee manager = employeeRepository.findById(managerId)
-                .orElseThrow(()->
-                        new ResourceNotFoundException("Manager Not Found"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Manager not found"));
 
         List<Employee> subordinates = manager.getSubordinates();
 
-        if(subordinates.isEmpty()){
+        if (subordinates.isEmpty()) {
             return List.of();
         }
 
@@ -133,16 +136,17 @@ public class WorkLogApplicationService {
                 .toList();
 
         LocalDateTime start = weekStartDate.atStartOfDay();
-        LocalDateTime end = weekStartDate.plusDays(6).atTime(23,59,59);
+        LocalDateTime end = weekStartDate.plusDays(6).atTime(23, 59, 59);
 
-        List<WorkLog> logs = workLogRepository.findByEmployeeIdInAndStartTimeBetween(
-                employeeIds,start,end
-        );
+        List<WorkLog> logs =
+                workLogRepository.findByEmployeeIdInAndStartTimeBetween(
+                        employeeIds, start, end
+                );
 
         return subordinates.stream()
                 .map(emp -> {
                     List<WorkLog> empLogs = logs.stream()
-                            .filter(log ->  log.getEmployee().getId().equals(emp.getId()))
+                            .filter(log -> log.getEmployee().getId().equals(emp.getId()))
                             .toList();
 
                     long completed = empLogs.stream()
@@ -153,7 +157,7 @@ public class WorkLogApplicationService {
                             .filter(l -> l.getStatus() == WorkStatus.IN_PROGRESS)
                             .count();
 
-                    return new ManagerWeeklySummuryResponse(
+                    return new ManagerWeeklySummaryResponse(
                             emp.getId(),
                             emp.getFullname(),
                             empLogs.size(),

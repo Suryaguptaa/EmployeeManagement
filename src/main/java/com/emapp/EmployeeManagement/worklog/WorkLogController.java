@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -52,11 +51,14 @@ public class WorkLogController {
         return workLogApplicationService.getWeeklySummary(employeeId, startDate);
     }
 
-    public List<ManagerWeeklySummuryResponse> getManagerWeeklySummary(
+    @GetMapping("/manager/{managerId}/weekly")
+    public List<ManagerWeeklySummaryResponse> getManagerWeeklySummary(
             @PathVariable Long managerId,
             @RequestParam LocalDate startDate
-    )
-    {
-        return workLogApplicationService.getManagerWeeklyResponse(managerId,startDate);
+    ) {
+        return workLogApplicationService
+                .getManagerWeeklySummary(managerId, startDate);
     }
+
+
 }

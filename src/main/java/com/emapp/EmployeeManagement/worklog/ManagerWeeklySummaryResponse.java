@@ -1,6 +1,6 @@
 package com.emapp.EmployeeManagement.worklog;
 
-public class ManagerWeeklySummuryResponse {
+public class ManagerWeeklySummaryResponse {
 
     private final Long employeeId;
     private final String employeeName;
@@ -8,22 +8,18 @@ public class ManagerWeeklySummuryResponse {
     private final long completedCount;
     private final long inProgressCount;
 
-    public
-
-
-    ManagerWeeklySummuryResponse(
+    public ManagerWeeklySummaryResponse(
             Long employeeId,
             String employeeName,
             long totalLogs,
             long completedCount,
             long inProgressCount
-    )
-    {
+    ) {
         this.employeeId = employeeId;
         this.employeeName = employeeName;
-        this.totalLogs=totalLogs;
-        this.completedCount=completedCount;
-        this.inProgressCount=inProgressCount;
+        this.totalLogs = totalLogs;
+        this.completedCount = completedCount;
+        this.inProgressCount = inProgressCount;
     }
 
     public Long getEmployeeId() {

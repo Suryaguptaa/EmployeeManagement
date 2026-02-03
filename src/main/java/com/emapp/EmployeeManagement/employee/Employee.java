@@ -2,6 +2,7 @@ package com.emapp.EmployeeManagement.employee;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.emapp.EmployeeManagement.team.Team;
 
@@ -29,7 +30,7 @@ public class Employee {
     private Employee manager;
 
     @OneToMany(mappedBy = "manager")
-    private List<Employee> subordinates;
+    private List<Employee> subordinates = new ArrayList<>();
 
     @ManyToOne
     private Team team;
