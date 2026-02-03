@@ -51,4 +51,12 @@ public class WorkLogController {
     ){
         return workLogApplicationService.getWeeklySummary(employeeId, startDate);
     }
+
+    public List<ManagerWeeklySummuryResponse> getManagerWeeklySummary(
+            @PathVariable Long managerId,
+            @RequestParam LocalDate startDate
+    )
+    {
+        return workLogApplicationService.getManagerWeeklyResponse(managerId,startDate);
+    }
 }

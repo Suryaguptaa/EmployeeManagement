@@ -113,4 +113,55 @@ public class WorkLogApplicationService {
                 .toList();
     }
 
+    public List<ManagerWeeklySummuryResponse> getManagerWeeklyResponse(
+            Long managerId,
+            LocalDate weekStartDate
+    )
+    {
+        Employee manager = employeeRepository.findById(managerId)
+                .orElseThrow(()->
+                        new ResourceNotFoundException("Manager Not Found"));
+
+        List<Employee> subordinates = manager.getSubordinates();
+
+        if(subordinates.isEmpty()){
+            return List.of();
+        }
+
+        List<Long> employeeIds = subordinates.stream()
+                .map(Employee::getId)
+                .toList();
+
+        LocalDateTime start = weekStartDate.atStartOfDay();
+        LocalDateTime end = weekStartDate.plusDays(6).atTime(23,59,59);
+
+        List<WorkLog> logs = workLogRepository.findByEmployeeIdInAndStartTimeBetween(
+                employeeIds,start,end
+        );
+
+        return subordinates.stream()
+                .map(emp -> {
+                    List<WorkLog> empLogs = logs.stream()
+                            .filter(log ->  log.getEmployee().getId().equals(emp.getId()))
+                            .toList();
+
+                    long completed = empLogs.stream()
+                            .filter(l -> l.getStatus() == WorkStatus.COMPLETED)
+                            .count();
+
+                    long inProgress = empLogs.stream()
+                            .filter(l -> l.getStatus() == WorkStatus.IN_PROGRESS)
+                            .count();
+
+                    return new ManagerWeeklySummuryResponse(
+                            emp.getId(),
+                            emp.getFullname(),
+                            empLogs.size(),
+                            completed,
+                            inProgress
+                    );
+                })
+                .toList();
+    }
+
 }
